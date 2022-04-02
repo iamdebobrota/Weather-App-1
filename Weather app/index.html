@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+#kl{
+    text-align: center;
+    margin-top: -1px;
+}
+#btn{
+    text-align: center;
+}
+#button{
+border: none;
+background-color: #FF1361;
+height: 40px;
+width: 120px;
+border-radius: 20px;
+color: white;
+font-size: 18px;
+margin-left: 15px;
+    
+}
+#button:hover{
+cursor: pointer;
+    background-color: #231557;
+    font-weight: 600;
+    
+}
+#city {
+height: 35px;
+width: 300px;
+border-radius: 7px;
+background-color: aliceblue;
+outline: none;
+font-size: 20px;
+padding-left: 8px;
+border: none;
+border-bottom: 2px solid #FF1361;
+
+}
+h1{
+    color: red;
+}
+#container{
+display: flex;
+gap: 200px;
+margin-top: 10px;
+
+}
+#container > div:nth-child(1){
+border: 1px solid red;
+padding: 10px;
+height: 370px;
+background-image: linear-gradient(-225deg, #231557 0%, #44107A 29%, #FF1361 67%, #FFF800 100%);
+color: #ffff;
+}
+#sun{
+    height: 70px;
+    border-radius: 15px;
+}
+
+    </style>
+    
+</head>
+<body>
+    <h1 id="kl"> Know Your Local Weather</h1>
+
+
+<div id="btn">
+    <input type="text" id="city" placeholder="Enter your city name here.."> 
+    <button onclick="getweather()" id="button">Get Weather</button>
+</div>
+
+
+   <div id="container">
+
+
+ 
+<!-- <img src="rain.png" alt="" id="sun"> -->
+
+    <!-- <div class="mapouter"><div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=kolkata&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.whatismyip-address.com/divi-discount/"></a><br><style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}</style><a href="https://www.embedgooglemap.net">map widget for website</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div></div> -->
+   </div>
+
+</body>
+</html>
+<script>
+    
+//fetch()
+//url
+//api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+
+
+
+//let url = "api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}";
+//7ed62d785872e161eeaf064739e5b004
+
+var container= document.querySelector("#container");
+
+
+ async function getweather(){
+
+
+    try{
+
+        let city = document.getElementById("city").value;
+
+ let res = await  fetch(
+     `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=7ed62d785872e161eeaf064739e5b004&units=metric`)
+
+
+//let res = await  fetch(`https://api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}&appid=7ed62d785872e161eeaf064739e5b004&units=metric`)
+
+
+
+    
+    let data = await res.json()
+
+    appendData(data)
+
+console.log("data:",data)
+    }
+catch(err){
+
+console.log("err:",err)
+}
+ }
+
+
+
+function appendData(data){
+
+    container.innerHTML=null;
+
+    
+
+let div1=document.createElement("div");
+div1.setAttribute("id","child1")
+var name = document.createElement("h3")
+name.innerText =`City Name:  ${data.name}`;
+
+let temp = document.createElement("h3")
+temp.innerText=`Max-Temperature: ${data.main.temp_max}`;
+
+let temp2 = document.createElement("h3")
+temp2.innerText=`Min-Temperature: ${data.main.temp_min}`;
+
+let wind = document.createElement("h3")
+wind.innerText=`wind: ${data.wind.speed}`;
+
+let clouds =document.createElement("h3")
+clouds.innerText = `Clouds: ${data.clouds.all}`;
+
+let sunrise = document.createElement("h3")
+sunrise.innerText=`sunrise: ${data.sys.sunrise}` ;
+// sunrise.style.color="red"
+
+let sunset = document.createElement("h3")
+sunset.innerText=`sunrise: ${data.sys.sunset}` ;
+// sunset.style.color="red"
+
+let sun=document.createElement("img");
+sun.src="sun.gif";
+sun.setAttribute("id","sun")
+div1.append(name, temp,temp2, wind ,clouds, sunrise,sunset,sun)
+
+
+
+let div2=document.createElement("div");
+div2.setAttribute("id","child2")
+
+let iframe = document.createElement("iframe");
+iframe.src=`https://maps.google.com/maps?q=${data.name}&t=&z=13&ie=UTF8&iwloc=&output=embed`
+iframe.width="500px"
+iframe.height="500px"
+
+
+
+
+
+
+div2.append(iframe)
+
+container.append(div1,div2)
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
